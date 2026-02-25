@@ -1,6 +1,6 @@
 #include "help.hpp"
 
-const std::string VERSION = "0.0.1";
+const std::string VERSION = "1.0.0";
 
 struct Command {
     std::string name;
