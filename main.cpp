@@ -1,25 +1,40 @@
 #include <iostream>
-#include <curl/curl.h>
+#include "fetch/fetch.hpp"
+#include "parse/parse_json.hpp"
+#include "cli/help.hpp"
 
-int main(){
-    const char *API_URL = "https://api.scryfall.com/cards/random?q=is%3Acommander";
-    
-    CURL *curl;
-    curl = curl_easy_init();
+const std::string VERSION = "0.0.1";
 
-    if(curl){
-        // set headers
-        struct curl_slist *headers = NULL;
-        headers = curl_slist_append(headers, "Accept: */*");
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, "Etali/0.1");
+void print_version() {
+    std::cout << "Etali v" << VERSION << std::endl;
+}
 
-        // set url
-        curl_easy_setopt(curl, CURLOPT_URL, API_URL);
+void print_random_commander() {
+    std::string response = fetch_random_commander("");
     
-        CURLcode response = curl_easy_perform(curl);
+    ScryfallCard card_object = parse_json(response);
     
-        std::cout << response;
+    std::cout << card_to_string(card_object) << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+    
+    if (argc <= 1){
+        print_random_commander();
+        return 0;
     }
+    
+    std::string command = argv[1];
+    
+    if (command == "-h" | command == "--help"){
+        print_help();
+        return 0;
 
-    return 0;
+    } else if (command == "-v" | command == "--version"){
+        print_version();
+        return 0;
+    } else {
+        std::cout << "error: invalid option '"<< command << "'" << std::endl;
+    }
+    
 }
