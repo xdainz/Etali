@@ -2,7 +2,6 @@
 #define PARSE_JSON_H 
 
 
-#include <memory>
 #include <json/json.h>
 #include "../model/card.h"
 #include <iostream>
