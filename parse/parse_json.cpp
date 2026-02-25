@@ -1,10 +1,6 @@
 #include "parse_json.hpp"
 
 ScryfallCard parse_json(std::string raw){
-    
-    if(raw.rfind("ERROR:", 0) == 0){
-        return {};
-    }
 
     Json::CharReaderBuilder b;
     std::string errs;
@@ -13,8 +9,8 @@ ScryfallCard parse_json(std::string raw){
     bool ok = reader->parse(raw.c_str(), raw.c_str() + raw.size(), &root, &errs);
 
     if(!ok){
+        std::cout << "ERROR: Unexpected response:  " << raw << std::endl;
         std::cerr << "Failed to parse JSON: " << errs << std::endl;
-        return {};
     }
 
     if(root.isObject() && root.isMember("object") && root["object"].asString() == "card"){
@@ -23,6 +19,5 @@ ScryfallCard parse_json(std::string raw){
     }
     
     return {};
-
  
 };
