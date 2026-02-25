@@ -1,6 +1,7 @@
 #include "fetch.hpp"
 
 const std::string BASE_URL = "https://api.scryfall.com/cards/";
+const std::string USER_AGENT = "Etali/"+ VERSION;
 
 static size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp){
     size_t real_size = size * nmemb;
@@ -24,7 +25,7 @@ std::string fetch_random_commander(std::string args){
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Accept: */*");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "Etali/0.1");
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, USER_AGENT.c_str());
 
     // set url (use c_str())
     curl_easy_setopt(curl, CURLOPT_URL, API_URL.c_str());

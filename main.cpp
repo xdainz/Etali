@@ -3,7 +3,6 @@
 #include "parse/parse_json.hpp"
 #include "cli/help.hpp"
 
-const std::string VERSION = "0.0.1";
 
 void print_version() {
     std::cout << "Etali v" << VERSION << std::endl;

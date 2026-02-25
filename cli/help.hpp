@@ -6,6 +6,7 @@
 #include <iomanip>
 
 void print_help();
+extern const std::string VERSION;
 
 #endif
 

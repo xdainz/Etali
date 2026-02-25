@@ -1,5 +1,7 @@
 #include "help.hpp"
 
+const std::string VERSION = "0.0.1";
+
 struct Command {
     std::string name;
     std::string details;
