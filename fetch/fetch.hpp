@@ -4,6 +4,6 @@
 #include <string>
 #include <curl/curl.h>
 
-std::string fetch_single(std::string args);
+std::string fetch_random_commander(std::string args);
 
 #endif

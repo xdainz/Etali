@@ -9,13 +9,9 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
     return real_size;
 }
 
-std::string fetch_single(std::string args){
+std::string fetch_random_commander(std::string args){
 
-    if (args == ""){
-        args = "random?q=is%3Acommander";
-    }
-
-    const std::string API_URL = BASE_URL + args;
+    const std::string API_URL = BASE_URL + "random?q=is%3Acommander";
 
     CURL *curl = curl_easy_init();
     std::string response_body;
