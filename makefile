@@ -1,4 +1,5 @@
 CFLAGS = -lcurl -ljsoncpp
+DEPENDENCIES = jsoncpp curl gcc-libs glibc 
 
 all: etali
 
@@ -21,6 +22,10 @@ parse_json.o: parse/parse_json.cpp
 help.o: cli/help.cpp
 	@echo "Compiling cli help"
 	g++ $(CFLAGS) -c cli/help.cpp
+
+prepare:
+	@echo "Installing dependencies..."
+	sudo pacman -S --needed --noconfirm  $(DEPENDENCIES)
 
 clean:
 	@echo "Cleaning..."
