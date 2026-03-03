@@ -23,8 +23,32 @@ static CURL* set_curl(){
 
     return curl;
 }
+
+std::vector<std::string> fetch_search(std::string query){
+    const std::string API_URL = BASE_URL + "search?q=" + query;
+    CURL *curl = set_curl();
+ 
+    std::string response_body;
+    if(!curl){
+        return {"ERROR:1"};
+    }
+
+    CURLcode res = curl_easy_perform(curl);
+
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_body);
     // set url (use c_str())
     curl_easy_setopt(curl, CURLOPT_URL, API_URL.c_str());
+    
+    // cleanup
+    curl_easy_cleanup(curl);
+
+    if(res != CURLE_OK){
+        return {"ERROR:" + std::to_string((int)res)};
+    }
+
+    return {response_body};
+   
+}
 
 std::string fetch_random_commander(std::string args){
     const std::string API_URL = BASE_URL + "random?q=is%3Acommander";
