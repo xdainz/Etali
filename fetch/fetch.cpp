@@ -74,7 +74,6 @@ std::string fetch_random_commander(std::string args){
         return std::string("ERROR:") + std::to_string((int)res);
     }
 
-    std:: cout << response_body << std::endl;
     return response_body;
 
 }
