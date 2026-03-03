@@ -24,7 +24,7 @@ static CURL* set_curl(){
     return curl;
 }
 
-std::vector<std::string> fetch_search(std::string query){
+std::string fetch_search(std::string query){
     const std::string API_URL = BASE_URL + "search?q=" + query;
     CURL *curl = set_curl();
  
@@ -33,19 +33,21 @@ std::vector<std::string> fetch_search(std::string query){
         return {"ERROR:1"};
     }
 
-    CURLcode res = curl_easy_perform(curl);
-
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_body);
     // set url (use c_str())
     curl_easy_setopt(curl, CURLOPT_URL, API_URL.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_body);
     
+    CURLcode res = curl_easy_perform(curl);
+
     // cleanup
     curl_easy_cleanup(curl);
 
     if(res != CURLE_OK){
+        std::cout << API_URL;
+        std::cout << response_body;
         return {"ERROR:" + std::to_string((int)res)};
     }
-
+    
     return {response_body};
    
 }
@@ -72,6 +74,7 @@ std::string fetch_random_commander(std::string args){
         return std::string("ERROR:") + std::to_string((int)res);
     }
 
+    std:: cout << response_body << std::endl;
     return response_body;
 
 }
