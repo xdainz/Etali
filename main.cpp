@@ -8,6 +8,20 @@ void print_version() {
     std::cout << "Etali v" << VERSION << std::endl;
 }
 
+void open_vim(std::string data) {
+    // input long ahh response from api into a file and
+    // open it in vim for the user
+    if (data.length() > 76) { // size of error return string
+        FILE* vim = popen("vim -MR -", "w");
+        
+        if(vim) {
+            fputs(data.c_str(), vim);
+            pclose(vim);
+        }
+    } 
+
+}
+
 void print_random_commander() {
     std::string response = fetch_random_commander("");
     
@@ -16,15 +30,21 @@ void print_random_commander() {
     std::cout << card_to_string(card_object) << std::endl;
 }
 
-void print_search(std::string query) {
+std::string print_search(std::string query) {
     std::string response = fetch_search(query);
     
     std::vector<ScryfallCard> card_list = parse_multiple(response);
     
+    std::string output;
+    
     for (const auto& card: card_list){
-        std::cout << card_to_string(card) << std::endl;
-        std::cout << std::endl;
+        output += "---------------------------------------------------------------------------\n";
+        output += card_to_string(card) + "\n";
     }
+    output += "---------------------------------------------------------------------------\n";
+
+    // some queries that include <= like "c<=gruul" don't seem to work and return nothing
+    return output;
 
 }
 
@@ -67,10 +87,10 @@ int main(int argc, char* argv[]) {
             std::cout << "error: too many args" << std::endl << "  usage: use quotes when your query has many args";
             return 1;
         } else {
-            print_search(clean_search(argv[2]));
+            open_vim(print_search(clean_search(argv[2])));
             return 0;
         }
-        
+
     } else {
         std::cout << "error: invalid option '"<< command << "'" << std::endl;
     }
