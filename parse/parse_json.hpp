@@ -7,5 +7,6 @@
 #include <iostream>
 
 ScryfallCard parse_json(std::string raw);
+std::vector<ScryfallCard> parse_multiple(std::string raw);
 
 #endif
