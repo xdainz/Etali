@@ -4,6 +4,23 @@
 #include <sstream>
 #include <json/json.h>
 
+struct CardFace {
+    std::string object;
+    std::string name;
+    std::string mana_cost;
+    std::string type_line;
+    std::string oracle_text;
+    std::string flavor_text;
+    std::vector<std::string> colors;
+    std::vector<std::string> color_indicator;
+    std::string power;
+    std::string toughness;
+    std::string artist;
+    std::string artist_id;
+    std::string illustration_id;
+    std::map<std::string, std::string> image_uris;
+};
+
 struct ScryfallCard {
     std::string object; // "card"
     std::string id;
@@ -32,7 +49,40 @@ struct ScryfallCard {
     std::string collector_number;
     bool digital = false;
     std::map<std::string, std::string> legalities; // e.g., standard: "legal"
+    
+    // Multi-faced cards
+    std::vector<CardFace> card_faces;
 };
+
+static CardFace parse_card_face(const Json::Value &f){
+    CardFace face;
+    if(!f.isObject()) return face;
+    if(f.isMember("object")) face.object = f["object"].asString();
+    if(f.isMember("name")) face.name = f["name"].asString();
+    if(f.isMember("mana_cost")) face.mana_cost = f["mana_cost"].asString();
+    if(f.isMember("type_line")) face.type_line = f["type_line"].asString();
+    if(f.isMember("oracle_text")) face.oracle_text = f["oracle_text"].asString();
+    if(f.isMember("flavor_text")) face.flavor_text = f["flavor_text"].asString();
+    if(f.isMember("power")) face.power = f["power"].asString();
+    if(f.isMember("toughness")) face.toughness = f["toughness"].asString();
+    if(f.isMember("artist")) face.artist = f["artist"].asString();
+    if(f.isMember("artist_id")) face.artist_id = f["artist_id"].asString();
+    if(f.isMember("illustration_id")) face.illustration_id = f["illustration_id"].asString();
+
+    if(f.isMember("colors") && f["colors"].isArray()){
+        for(const auto &col : f["colors"]) if(col.isString()) face.colors.push_back(col.asString());
+    }
+    if(f.isMember("color_indicator") && f["color_indicator"].isArray()){
+        for(const auto &ci : f["color_indicator"]) if(ci.isString()) face.color_indicator.push_back(ci.asString());
+    }
+    if(f.isMember("image_uris") && f["image_uris"].isObject()){
+        const Json::Value &imgs = f["image_uris"];
+        for(const auto &name : imgs.getMemberNames()){
+            face.image_uris[name] = imgs[name].asString();
+        }
+    }
+    return face;
+}
 
 static ScryfallCard parse_card(const Json::Value &v){
     ScryfallCard c;
@@ -81,6 +131,12 @@ static ScryfallCard parse_card(const Json::Value &v){
         }
     }
 
+    if(v.isMember("card_faces") && v["card_faces"].isArray()){
+        for(const auto &face : v["card_faces"]){
+            c.card_faces.push_back(parse_card_face(face));
+        }
+    }
+
     return c;
 }
 
@@ -94,7 +150,22 @@ static std::string card_to_string(const ScryfallCard &c){
         for(size_t i=0;i<c.colors.size();++i){ if(i) ss << ", "; ss << c.colors[i]; }
         ss << std::endl;
     }
-    if(!c.oracle_text.empty()) ss << "Oracle: " << c.oracle_text << std::endl;
+    
+    // Handle multi-faced cards
+    if(!c.card_faces.empty()){
+        for(size_t i=0; i<c.card_faces.size(); ++i){
+            const CardFace &face = c.card_faces[i];
+            ss << "\n--- Face " << (i+1) << ": " << face.name << " ---" << std::endl;
+            if(!face.type_line.empty()) ss << "Type: " << face.type_line << std::endl;
+            if(!face.mana_cost.empty()) ss << "Mana Cost: " << face.mana_cost << std::endl;
+            if(!face.power.empty() && !face.toughness.empty())
+                ss << "P/T: " << face.power << "/" << face.toughness << std::endl;
+            if(!face.oracle_text.empty()) ss << "Oracle: " << face.oracle_text << std::endl;
+        }
+    } else if(!c.oracle_text.empty()){
+        ss << "Oracle: " << c.oracle_text << std::endl;
+    }
+    
     ss << "Set: " << c.set_name << " (" << c.set << ")" << " #" << c.collector_number;
     return ss.str();
 }
