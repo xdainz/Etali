@@ -43,7 +43,6 @@ std::string print_search(std::string query) {
     }
     output += "---------------------------------------------------------------------------\n";
 
-    // some queries that include <= like "c<=gruul" don't seem to work and return nothing
     return output;
 
 }
@@ -51,11 +50,13 @@ std::string print_search(std::string query) {
 std::string clean_search(const std::string &query){
     std::string cleaned_query;
 
-    for (char c: query){
-       if (c == ' '){
-        cleaned_query += "%20";
-       } else {
+    for (unsigned char c : query){
+       if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~' || c == ':'){
         cleaned_query += c;
+       } else {
+        char hex[4];
+        snprintf(hex, sizeof(hex), "%%%02X", c);
+        cleaned_query += hex;
        } 
     }
     
