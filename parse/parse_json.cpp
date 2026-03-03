@@ -1,6 +1,6 @@
 #include "parse_json.hpp"
 
-ScryfallCard parse_json(std::string raw) {
+ScryfallCard parse_json(const std::string &raw) {
 
     Json::CharReaderBuilder b;
     std::string errs;
@@ -23,7 +23,7 @@ ScryfallCard parse_json(std::string raw) {
     return {};
 };
 
-std::vector<ScryfallCard> parse_multiple(std::string raw) {
+std::vector<ScryfallCard> parse_multiple(const std::string &raw) {
 
     Json::CharReaderBuilder b;
     std::string errs;
@@ -31,6 +31,11 @@ std::vector<ScryfallCard> parse_multiple(std::string raw) {
     std::unique_ptr<Json::CharReader> reader(b.newCharReader());
     bool ok =
         reader->parse(raw.c_str(), raw.c_str() + raw.size(), &root, &errs);
+
+    if (!ok) {
+        std::cerr << "Failed to parse JSON: " << errs << std::endl;
+        return {};
+    }
 
     if (root.isObject() && root.isMember("object") &&
         root["object"].asString() == "list") {

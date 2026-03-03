@@ -8,7 +8,7 @@ void print_version() {
     std::cout << "Etali v" << VERSION << std::endl;
 }
 
-void open_vim(std::string data) {
+void open_vim(const std::string &data) {
     // input long ahh response from api into a file and
     // open it in vim for the user
     if (data.length() > 76) { // size of error return string
@@ -48,7 +48,7 @@ std::string print_search(std::string query) {
 
 }
 
-std::string clean_search(std::string query){
+std::string clean_search(const std::string &query){
     std::string cleaned_query;
 
     for (char c: query){
@@ -71,15 +71,15 @@ int main(int argc, char* argv[]) {
     
     std::string command = argv[1];
     
-    if (command == "-h" | command == "--help"){
+    if (command == "-h" || command == "--help"){
         print_help();
         return 0;
 
-    } else if (command == "-v" | command == "--version"){
+    } else if (command == "-v" || command == "--version"){
         print_version();
         return 0;
 
-    } else if(command == "-s" | command == "--search"){
+    } else if(command == "-s" || command == "--search"){
         if (argc <=2){
             std::cout << "error: missing args" << std::endl << "  try: etali --help";
             return 1;
@@ -93,6 +93,7 @@ int main(int argc, char* argv[]) {
 
     } else {
         std::cout << "error: invalid option '"<< command << "'" << std::endl;
+        return 1;
     }
     
 }

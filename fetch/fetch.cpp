@@ -10,8 +10,9 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
     return real_size;
 }
 
-static CURL* set_curl(){
+static CURL* set_curl(struct curl_slist **out_headers){
     CURL* curl = curl_easy_init();
+    if(!curl) return nullptr;
     // set headers
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Accept: */*");
@@ -21,12 +22,14 @@ static CURL* set_curl(){
     // set write callback to capture response body
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 
+    *out_headers = headers;
     return curl;
 }
 
-std::string fetch_search(std::string query){
+std::string fetch_search(const std::string &query){
     const std::string API_URL = BASE_URL + "search?q=" + query;
-    CURL *curl = set_curl();
+    struct curl_slist *headers = NULL;
+    CURL *curl = set_curl(&headers);
  
     std::string response_body;
     if(!curl){
@@ -40,6 +43,7 @@ std::string fetch_search(std::string query){
     CURLcode res = curl_easy_perform(curl);
 
     // cleanup
+    curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 
     if(res != CURLE_OK){
@@ -52,10 +56,11 @@ std::string fetch_search(std::string query){
    
 }
 
-std::string fetch_random_commander(std::string args){
+std::string fetch_random_commander(const std::string &args){
     const std::string API_URL = BASE_URL + "random?q=is%3Acommander";
     std::string response_body;
-    CURL* curl = set_curl();
+    struct curl_slist *headers = NULL;
+    CURL* curl = set_curl(&headers);
 
     if(!curl){
         return std::string("ERROR:1");
@@ -68,6 +73,7 @@ std::string fetch_random_commander(std::string args){
     CURLcode res = curl_easy_perform(curl);
 
     // cleanup
+    curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 
     if(res != CURLE_OK){

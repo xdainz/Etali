@@ -6,7 +6,7 @@
 #include "../model/card.h"
 #include <iostream>
 
-ScryfallCard parse_json(std::string raw);
-std::vector<ScryfallCard> parse_multiple(std::string raw);
+ScryfallCard parse_json(const std::string &raw);
+std::vector<ScryfallCard> parse_multiple(const std::string &raw);
 
 #endif

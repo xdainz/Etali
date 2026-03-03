@@ -1,3 +1,6 @@
+#ifndef CARD_H
+#define CARD_H
+
 #include <string>
 #include <vector>
 #include <map>
@@ -169,3 +172,5 @@ static std::string card_to_string(const ScryfallCard &c){
     ss << "Set: " << c.set_name << " (" << c.set << ")" << " #" << c.collector_number;
     return ss.str();
 }
+
+#endif
