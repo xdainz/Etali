@@ -43,8 +43,8 @@ std::string fetch_search(std::string query){
     curl_easy_cleanup(curl);
 
     if(res != CURLE_OK){
-        std::cout << API_URL;
-        std::cout << response_body;
+        std::cout << API_URL << std::endl;
+        std::cout << response_body << std::endl;
         return {"ERROR:" + std::to_string((int)res)};
     }
     
@@ -71,6 +71,8 @@ std::string fetch_random_commander(std::string args){
     curl_easy_cleanup(curl);
 
     if(res != CURLE_OK){
+        std::cout << API_URL << std::endl;
+        std::cout << response_body << std::endl;
         return std::string("ERROR:") + std::to_string((int)res);
     }
 
