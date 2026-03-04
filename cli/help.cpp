@@ -1,6 +1,6 @@
 #include "help.hpp"
 
-const std::string VERSION = "1.0.0";
+const std::string VERSION = "1.1.0";
 
 struct Command {
     std::string name;
@@ -13,7 +13,7 @@ void print_help() {
         {"", "Get a random commander"},
         {"{-h --help}", "Print this help message"},
         {"{-v --version}", "Print version information"},
-        //{"{-s --search} <query>", "Search for a card"},
+        {"{-s --search} <query>", "Search for a card"},
     };
 
     std::cout << "usage:\tetali <operation>" << std::endl;

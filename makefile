@@ -1,5 +1,5 @@
 CFLAGS = -lcurl -ljsoncpp
-DEPENDENCIES = jsoncpp curl gcc-libs glibc 
+DEPENDENCIES = jsoncpp curl gcc-libs glibc vim
 
 all: etali
 
