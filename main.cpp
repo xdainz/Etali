@@ -1,3 +1,5 @@
+#include <cctype>
+#include <cstdio>
 #include <iostream>
 #include "fetch/fetch.hpp"
 #include "parse/parse_json.hpp"
