@@ -5,6 +5,7 @@
 #include <curl/curl.h>
 #include "../cli/help.hpp"
 
-std::string fetch_random_commander(std::string args);
+std::string fetch_random_commander();
+std::string fetch_search(const std::string &search_terms);
 
 #endif
