@@ -56,7 +56,7 @@ std::string fetch_search(const std::string &query){
    
 }
 
-std::string fetch_random_commander(const std::string &args){
+std::string fetch_random_commander(){
     const std::string API_URL = BASE_URL + "random?q=is%3Acommander";
     std::string response_body;
     struct curl_slist *headers = NULL;
