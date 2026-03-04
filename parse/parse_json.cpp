@@ -50,6 +50,6 @@ std::vector<ScryfallCard> parse_multiple(const std::string &raw) {
         return card_list;
     }
 
-    std::cout << raw;
+    std::cerr << "Unexpected non-list JSON response in parse_multiple" << std::endl;
     return {};
 }
