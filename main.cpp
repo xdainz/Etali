@@ -17,7 +17,7 @@ void open_vim(const std::string &data) {
         return;
     }
 
-    FILE* vim = popen("vim -MR -", "w");
+    FILE* vim = popen("vim -MR -u NONE --noplugin -c \"set nomodeline\" -", "w");
     
     if (vim) {
         fputs(data.c_str(), vim);
