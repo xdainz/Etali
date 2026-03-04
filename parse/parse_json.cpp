@@ -21,7 +21,7 @@ ScryfallCard parse_json(const std::string &raw) {
     }
 
     return {};
-};
+}
 
 std::vector<ScryfallCard> parse_multiple(const std::string &raw) {
 
