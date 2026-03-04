@@ -26,7 +26,7 @@ void open_vim(const std::string &data) {
 }
 
 void print_random_commander() {
-    std::string response = fetch_random_commander("");
+    std::string response = fetch_random_commander();
     
     ScryfallCard card_object = parse_json(response);
     
