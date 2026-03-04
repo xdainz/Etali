@@ -11,15 +11,18 @@ void print_version() {
 void open_vim(const std::string &data) {
     // input long ahh response from api into a file and
     // open it in vim for the user
-    if (data.length() > 76) { // size of error return string
-        FILE* vim = popen("vim -MR -", "w");
-        
-        if(vim) {
-            fputs(data.c_str(), vim);
-            pclose(vim);
-        }
-    } 
+    // Errors are encoded with "ERROR:" prefix; print them directly instead of opening vim
+    if (data.rfind("ERROR:", 0) == 0) {
+        std::cout << data << std::endl;
+        return;
+    }
 
+    FILE* vim = popen("vim -MR -", "w");
+    
+    if (vim) {
+        fputs(data.c_str(), vim);
+        pclose(vim);
+    }
 }
 
 void print_random_commander() {
